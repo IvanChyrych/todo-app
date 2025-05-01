@@ -1,8 +1,48 @@
 .trello {
     &__header {
         height: 80px;
+        padding: 50px;
     }
     &__cards {
         height: 300px; 
+        &-todo{
+            width: 30%;
+            &-counter{
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            &-button{
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+        &-inprogress{
+            width: 30%;
+            &-counter{
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+        &-done{
+            width: 30%;
+            &-counter{
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            &-button{
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
     }
 }
