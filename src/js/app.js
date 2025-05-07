@@ -1,10 +1,13 @@
 import { Modal } from 'bootstrap';
 import { handleClickTodoForm } from './handlers';
 import { saveDataToLocalstorage } from "./localStorage";
+import { renderTodo } from './render';
 
-const todos = [];
+export const todos = [];
 
 const addTodoFormElement = document.querySelector('#todoForm');
+export const cardContainer = document.querySelector('.trello__cards')
+
 
 addTodoFormElement.addEventListener('click', handleClickTodoForm)
 
@@ -15,6 +18,20 @@ class todoItemClass {
         this.title = title
         this.discription = discription
     }
+}
+
+//функция создающая шаблон todo
+export function createTemplate({ id, ceratedAt, title, discription }) {
+    // const time = new Date(ceratedAt)
+    return `
+    <div class="card" id='${id}' style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">${title}</h5>
+            <p class="card-text">${discription}</p>
+            <a href="#" class="btn btn-primary">Перейти куда-нибудь</a>
+        </div>
+    </div>
+`
 }
 
 // функция добавляет данные в todo и в localstorage
@@ -29,7 +46,7 @@ export function addTodo() {
     todos.push(todoItem)
     console.log(todos);
     saveDataToLocalstorage('todoList', todos)
-
+    renderTodo();
 }
 
 
