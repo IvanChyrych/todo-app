@@ -1,48 +1,31 @@
-.trello {
-    &__header {
-        height: 80px;
-        padding: 50px;
-    }
-    &__cards {
-        height: 300px; 
-        &-todo{
-            width: 30%;
-            &-counter{
-                height: 50px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            &-button{
-                height: 50px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-        }
-        &-inprogress{
-            width: 30%;
-            &-counter{
-                height: 50px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-        }
-        &-done{
-            width: 30%;
-            &-counter{
-                height: 50px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            &-button{
-                height: 50px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-        }
-    }
+.container{
+    display: flex;
+    justify-content: center;
+    height: 100vh;
 }
+
+.trello{
+    width: 100%;
+    height: 100%;
+}
+
+.trello__header{
+    display: flex;
+    justify-content: space-between;
+}
+
+.trello__cards{
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+}
+
+.trello__column{
+    height: 90vh;
+    width: 33%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #c2ffb1;
+}
+
