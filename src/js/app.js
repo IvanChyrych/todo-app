@@ -1,3 +1,4 @@
+
 const data=getDataFromLocalStorage()
 render(data)
 
@@ -5,10 +6,15 @@ const saveTodoButtonElement=document.querySelector('#save-todo-button')
 const titleTodoElement=document.querySelector('#title')
 const discriptionTodoElement=document.querySelector('#discription')
 const columnElement=document.querySelector('#column')
-const trlloCardsElement=document.querySelector('.trello__cards')
+const trelloCardsElement=document.querySelector('.trello__cards')
+const editSaveTodoButton=document.querySelector('#edit-save-todo-button')
+
+let currentEditId=null
 
 saveTodoButtonElement.addEventListener('click', handleSubmitForm)
-trlloCardsElement.addEventListener('click',handleRemoveCard)
+trelloCardsElement.addEventListener('click',handleRemoveCard)
+trelloCardsElement.addEventListener('click', handleEditCard)
+editSaveTodoButton.addEventListener('click',handleSaveEditedCard)
 
 class Todo {
     constructor(id,column,title,discription) {
@@ -45,6 +51,42 @@ function handleRemoveCard({target}) {
     render(data)
 }
 
+function handleEditCard({target}) {
+if (target.dataset.role!=='edit') {
+    return   
+}
+const parentElement=target.closest('.card')
+const id=parentElement.dataset.id
+const todo=data.find((todo)=>todo.id==id)
+
+currentEditId=id
+
+document.querySelector('#edit-title').value=todo.title
+document.querySelector('#edit-discription').value=todo.discription
+document.querySelector('#edit-column').value=todo.column
+
+const modal = new bootstrap.Modal(document.getElementById('editModal'))
+modal.show()
+}
+
+
+function handleSaveEditedCard() {
+    const title=document.querySelector('#edit-title').value
+    const discription=document.querySelector('#edit-discription').value
+    const column=document.querySelector('#edit-column').value
+
+    const index=data.findIndex((todo)=>todo.id==currentEditId)
+
+    data[index].title=title
+    data[index].discription=discription
+    data[index].column=column
+
+    setDataToLocalStorage(data)
+    render(data)
+    currentEditId=null
+}
+
+
 function buildTemplate({id,title,discription}) {
     return `
         <div data-id="${id}" class="card" style="width: 18rem;">
@@ -53,6 +95,7 @@ function buildTemplate({id,title,discription}) {
                 <h5 class="card-title">${title}</h5>
                 <p class="card-text">${discription}</p>
             </div>
+        <button data-role="edit" class="btn btn-warning">edit</button>
         </div>
     `
 }
