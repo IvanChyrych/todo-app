@@ -1,53 +1,64 @@
-import { Modal } from 'bootstrap';
-import { handleClickTodoForm } from './handlers';
-import { saveDataToLocalstorage } from "./localStorage";
-import { renderTodo } from './render';
-import { getDataFromLocalStorage } from './localStorage';
+const data=getDataFromLocalStorage()
 
-export const todos = [];
+const saveTodoButtonElement=document.querySelector('#save-todo-button')
+const titleTodoElement=document.querySelector('#title')
+const discriptionTodoElement=document.querySelector('#discription')
+const todoContainerElement=document.querySelector('.trello__todo-container')
 
-const addTodoFormElement = document.querySelector('#todoForm');
-export const cardContainer = document.querySelector('.trello__todo-container')
+saveTodoButtonElement.addEventListener('click', handleSubmitForm)
 
-
-addTodoFormElement.addEventListener('click', handleClickTodoForm)
-
-// класс содержащий структуру todo
-class todoItemClass {
-    id = Date.now();
-    constructor(title, discription) {
-        this.title = title
-        this.discription = discription
+class Todo {
+    constructor(title,discription) {
+        this.title=title
+        this.discription=discription
     }
 }
 
-//функция создающая шаблон todo
-export function createTemplate({ id, ceratedAt, title, discription }) {
-    // const time = new Date(ceratedAt)
+function handleSubmitForm() {
+    const title=titleTodoElement.value
+    const discription = discriptionTodoElement.value 
+
+    const newTodo=new Todo(title,discription)
+    data.push(newTodo)
+
+    setDataToLocalStorage(data)
+    render(data)
+}
+
+function buildTemplate({title,discription}) {
     return `
-    <div class="card " id='${id}' style="width: 18rem;">
-    <button type="button" class="btn-close " style="top: 10px; right: 10px;"></button>
-        <div class="card-body">
-            <h5 class="card-title">${title}</h5>
-            <p class="card-text">${discription}</p>
-            <a href="#" class="btn btn-primary">Перейти куда-нибудь</a>
+        <div class="card" style="width: 18rem;">
+        <button class="btn btn-close"></button>
+            <div class="card-body">
+                <h5 class="card-title">${title}</h5>
+                <p class="card-text">${discription}</p>
+            </div>
         </div>
-    </div>
-`
+    `
 }
 
-// функция добавляет данные в todo и в localstorage
-export function addTodo() {
-    const title = document.querySelector('#title').value
-    const discription = document.querySelector('#discription').value;
-
-    const todoItem = new todoItemClass(title, discription)
-    todos.push(todoItem)
-    console.log(todos);
-    saveDataToLocalstorage('todoList', todos)
-    renderTodo();
+function setDataToLocalStorage(data) {
+    localStorage.setItem('todoItem', JSON.stringify(data))
 }
 
-getDataFromLocalStorage()
+export function getDataFromLocalStorage() {
+    const data=localStorage.getItem('todoItem')
+    if (data) {
+        const dataFromStorage=JSON.parse(data)
+        return dataFromStorage.map((todo)=>{
+            return todo
+        })
+    }else{
+        return[]
+    }
+}
 
+function render(data) {
+    todoContainerElement.innerHTML=''
+    data.forEach((todo)=>{
+        const template=buildTemplate(todo)
+        todoContainerElement.insertAdjacentHTML('beforeend',template)
+    })
+}
 
+render(data)
