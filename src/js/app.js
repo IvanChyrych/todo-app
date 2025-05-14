@@ -1,26 +1,31 @@
 const data=getDataFromLocalStorage()
+render(data)
 
 const saveTodoButtonElement=document.querySelector('#save-todo-button')
 const titleTodoElement=document.querySelector('#title')
 const discriptionTodoElement=document.querySelector('#discription')
-const todoContainerElement=document.querySelector('.trello__todo-container')
+const columnElement=document.querySelector('#column')
+const trlloCardsElement=document.querySelector('.trello__cards')
 
 saveTodoButtonElement.addEventListener('click', handleSubmitForm)
-todoContainerElement.addEventListener('click',handleRemoveCard)
+trlloCardsElement.addEventListener('click',handleRemoveCard)
 
 class Todo {
-    constructor(id,title,discription) {
+    constructor(id,column,title,discription) {
         this.id=id
         this.title=title
         this.discription=discription
+        this.column=column
     }
 }
 
 function handleSubmitForm() {
+    const id=Date.now()
+    const column=columnElement.value
     const title=titleTodoElement.value
     const discription = discriptionTodoElement.value 
 
-    const newTodo=new Todo(title,discription)
+    const newTodo=new Todo(id,column,title,discription)
     data.push(newTodo)
 
     setDataToLocalStorage(data)
@@ -69,11 +74,24 @@ export function getDataFromLocalStorage() {
 }
 
 function render(data) {
-    todoContainerElement.innerHTML=''
+
+    document.querySelector('.trello__todo-container').innerHTML=''
+    document.querySelector('.trello__inprogress-container').innerHTML=''
+    document.querySelector('.trello__done-container').innerHTML=''
+
     data.forEach((todo)=>{
+        let containerSelector=''
+        if (todo.column==='todo') {
+            containerSelector='.trello__todo-container'
+        }
+        else if (todo.column==='in-progress') {
+            containerSelector='.trello__inprogress-container'
+        }
+        else if (todo.column==='done') {
+            containerSelector='.trello__done-container'
+        }
+        const container=document.querySelector(containerSelector)
         const template=buildTemplate(todo)
-        todoContainerElement.insertAdjacentHTML('beforeend',template)
+        container.insertAdjacentHTML('beforeend',template)
     })
 }
-
-render(data)

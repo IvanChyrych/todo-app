@@ -17,7 +17,7 @@
                         <p class="trello__clock">9:00</p>
                     </div>
                     <div class="trello__cards">
-                        <div class="trello__todo trello__column">
+                        <div class="trello__column trello__todo" data-column="todo">
                             <div class="trello__todo-header">
                                 <p>TODO</p>
                                 <p class="trello__todo-counter">5</p>
@@ -61,8 +61,10 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <select class="form-select" aria-label="Пример выбора по умолчанию">
-                                                    <option selected>Откройте это меню выбора</option>
+                                                <select id='column' class="form-select" aria-label="Пример выбора по умолчанию">
+                                                    <option value="todo">todo</option>
+                                                    <option value="in-progress">in progress</option>
+                                                    <option value="done">done</option>
                                                 </select>
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                                                 <button type="button" class="btn btn-primary" id="save-todo-button">Сохранить изменения</button>
@@ -72,7 +74,7 @@
                             </div>
                         </div>
                         
-                        <div class="trello__inprogress trello__column">
+                        <div class="trello__column trello__inprogress" data-column="in-progress">
                             <div class="trello__inprogress-header">
                                 <p>INPROGRESS</p>
                                 <p class="trello__inprogress-counter">6</p>
@@ -80,7 +82,7 @@
                             <div class="trello__inprogress-container"></div>
                         </div>
 
-                        <div class="trello__done trello__column">
+                        <div class="trello__column trello__done" data-column="done">
                             <div class="trello__done-header">
                                 <p>DONE</p>
                                 <p class="trello__done-counter">4</p>
