@@ -6,9 +6,11 @@ const discriptionTodoElement=document.querySelector('#discription')
 const todoContainerElement=document.querySelector('.trello__todo-container')
 
 saveTodoButtonElement.addEventListener('click', handleSubmitForm)
+todoContainerElement.addEventListener('click',handleRemoveCard)
 
 class Todo {
-    constructor(title,discription) {
+    constructor(id,title,discription) {
+        this.id=id
         this.title=title
         this.discription=discription
     }
@@ -25,10 +27,23 @@ function handleSubmitForm() {
     render(data)
 }
 
-function buildTemplate({title,discription}) {
+function handleRemoveCard({target}) {
+    const {role}=target.dataset
+    if (role!=='remove') {
+        return
+    }
+    const rootElement=target.closest('.card')
+    const {id}=rootElement.dataset
+    const index=data.findIndex((todo)=>todo.id==id)
+    data.splice(index,1)
+    setDataToLocalStorage(data)
+    render(data)
+}
+
+function buildTemplate({id,title,discription}) {
     return `
-        <div class="card" style="width: 18rem;">
-        <button class="btn btn-close"></button>
+        <div data-id="${id}" class="card" style="width: 18rem;">
+        <button data-role="remove" class="btn btn-close"></button>
             <div class="card-body">
                 <h5 class="card-title">${title}</h5>
                 <p class="card-text">${discription}</p>
