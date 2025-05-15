@@ -1,6 +1,3 @@
-const data=getDataFromLocalStorage()
-render(data)
-
 const saveTodoButtonElement=document.querySelector('#save-todo-button')
 const titleTodoElement=document.querySelector('#title')
 const discriptionTodoElement=document.querySelector('#discription')
@@ -8,6 +5,12 @@ const columnElement=document.querySelector('#column')
 const trelloCardsElement=document.querySelector('.trello__cards')
 const editSaveTodoButton=document.querySelector('#edit-save-todo-button')
 const handleDeleteAllCardButton = document.querySelector('#trello__button-delete-all')
+const todoCounterElement=document.querySelector('.trello__todo-counter')
+const inprogressCounterElement=document.querySelector('.trello__inprogress-counter')
+const doneCounterElement=document.querySelector('.trello__done-counter')
+
+const data=getDataFromLocalStorage()
+render(data)
 
 let currentEditId=null
 
@@ -24,6 +27,26 @@ class Todo {
         this.discription=discription
         this.column=column
     }
+}
+
+function updateCounter() {
+    let todoCount=0
+    let inprogressCount=0
+    let doneCount=0
+    data.forEach((todo)=>{
+        if (todo.column=='todo') {
+            todoCount+=1
+        }
+        if (todo.column=='in-progress') {
+            inprogressCount+=1
+        }
+        if (todo.column=='done') {
+            doneCount+=1
+        }
+    })
+    todoCounterElement.textContent=todoCount
+    inprogressCounterElement.textContent=inprogressCount
+    doneCounterElement.textContent=doneCount
 }
 
 function handleSubmitForm() {
@@ -150,4 +173,5 @@ function render(data) {
         const template=buildTemplate(todo)
         container.insertAdjacentHTML('beforeend',template)
     })
+    updateCounter()
 }
