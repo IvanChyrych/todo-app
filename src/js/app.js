@@ -1,4 +1,3 @@
-
 const data=getDataFromLocalStorage()
 render(data)
 
@@ -8,6 +7,7 @@ const discriptionTodoElement=document.querySelector('#discription')
 const columnElement=document.querySelector('#column')
 const trelloCardsElement=document.querySelector('.trello__cards')
 const editSaveTodoButton=document.querySelector('#edit-save-todo-button')
+const handleDeleteAllCardButton = document.querySelector('#trello__button-delete-all')
 
 let currentEditId=null
 
@@ -15,6 +15,7 @@ saveTodoButtonElement.addEventListener('click', handleSubmitForm)
 trelloCardsElement.addEventListener('click',handleRemoveCard)
 trelloCardsElement.addEventListener('click', handleEditCard)
 editSaveTodoButton.addEventListener('click',handleSaveEditedCard)
+handleDeleteAllCardButton.addEventListener('click', handleDeleteAllCard)
 
 class Todo {
     constructor(id,column,title,discription) {
@@ -49,6 +50,18 @@ function handleRemoveCard({target}) {
     data.splice(index,1)
     setDataToLocalStorage(data)
     render(data)
+}
+
+function handleDeleteAllCard() {
+    const confirmDeleteAll=confirm('Delete all cards?') 
+
+    if (confirmDeleteAll) {
+    const notDoneItems=data.filter(todo => todo.column!=='done');
+    data.length=0
+    notDoneItems.forEach((todo)=>data.push(todo))
+    setDataToLocalStorage(data)
+    render(data)
+    } 
 }
 
 function handleEditCard({target}) {
