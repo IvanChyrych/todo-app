@@ -15,7 +15,11 @@
                 <div class="trello">
                     <div class="trello__header">
                         <p class="trello__title">Trello</p>
-                        <p class="trello__clock">9:00</p>
+                        <div class="trello__clock d-flex">
+                            <div class="trello__clock-hours"></div>
+                            <div class="">:</div>
+                            <div class="trello__clock-minutes"></div>
+                        </div>
                     </div>
                     <div class="trello__cards">
                         <div class="trello__column trello__todo" data-column="todo">
@@ -132,8 +136,9 @@
                             <div class="trello__done-container"></div>
                             <button 
                                 class="btn btn-primary"
+                                id="trello__button-delete-all"
                             >
-                                <a href="#" id="trello__button-delete-all" class="btn trello__button">delete all</a>
+                                delete all
                             </button>
                         </div>
                     </div>

@@ -8,6 +8,8 @@ const handleDeleteAllCardButton = document.querySelector('#trello__button-delete
 const todoCounterElement=document.querySelector('.trello__todo-counter')
 const inprogressCounterElement=document.querySelector('.trello__inprogress-counter')
 const doneCounterElement=document.querySelector('.trello__done-counter')
+const hoursTimeElement=document.querySelector('.trello__clock-hours')
+const minutesTimeElement=document.querySelector('.trello__clock-minutes')
 
 const data=getDataFromLocalStorage()
 render(data)
@@ -26,6 +28,7 @@ class Todo {
         this.title=title
         this.discription=discription
         this.column=column
+        this.createdAt=new Date()
     }
 }
 
@@ -123,13 +126,28 @@ function handleSaveEditedCard() {
 }
 
 
-function buildTemplate({id,title,discription}) {
+function buildTemplate({id,title,discription,createdAt}) {
+    const date=new Date(createdAt)
     return `
         <div data-id="${id}" class="card" style="width: 18rem;">
         <button data-role="remove" class="btn btn-close"></button>
             <div class="card-body">
                 <h5 class="card-title">${title}</h5>
                 <p class="card-text">${discription}</p>
+                <div class="card__time d-flex">
+                    <div class="card__time-day d-flex p-2">
+                        <div class="card-createdAt">${date.getFullYear()}</div>
+                        <div class="card-createdAt">.</div>
+                        <div class="card-createdAt">${ date.getMonth()}</div>
+                        <div class="card-createdAt">.</div>
+                        <div class="card-createdAt">${date.getDay()}</div>
+                    </div>
+                    <div class="card__time-hours d-flex p-2">
+                        <div class="card-createdAt">${ date.getHours().toString().padStart(2,'0')}</div>
+                        <div class="card-createdAt">:</div>
+                        <div class="card-createdAt">${date.getMinutes().toString().padStart(2,'0')}</div>
+                    </div>
+                </div>
             </div>
         <button data-role="edit" class="btn btn-warning">edit</button>
         </div>
@@ -151,6 +169,15 @@ export function getDataFromLocalStorage() {
         return[]
     }
 }
+
+function currentTime() {
+    const time=new Date()
+    let hours=time.getHours().toString().padStart(2,'0')
+    let minutes=time.getMinutes().toString().padStart(2,'0')
+    hoursTimeElement.textContent=`${hours}`
+    minutesTimeElement.textContent=`${minutes}`
+}
+setInterval(currentTime,100)
 
 function render(data) {
 
