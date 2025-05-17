@@ -10,11 +10,16 @@ const inprogressCounterElement=document.querySelector('.trello__inprogress-count
 const doneCounterElement=document.querySelector('.trello__done-counter')
 const hoursTimeElement=document.querySelector('.trello__clock-hours')
 const minutesTimeElement=document.querySelector('.trello__clock-minutes')
+const selectUserElement=document.querySelector('.select__user')
+const selectUserEditElement=document.querySelector('.select__user-edit')
+
+let usersList=[]
 
 const data=getDataFromLocalStorage()
 render(data)
 
 let currentEditId=null
+
 
 saveTodoButtonElement.addEventListener('click', handleSubmitForm)
 trelloCardsElement.addEventListener('click',handleRemoveCard)
@@ -23,13 +28,39 @@ editSaveTodoButton.addEventListener('click',handleSaveEditedCard)
 handleDeleteAllCardButton.addEventListener('click', handleDeleteAllCard)
 
 class Todo {
-    constructor(id,column,title,discription) {
+    constructor(id,column,title,discription,userId) {
         this.id=id
         this.title=title
         this.discription=discription
         this.column=column
         this.createdAt=new Date()
+        this.user=userId
     }
+}
+
+fetch('https://jsonplaceholder.typicode.com/users')
+.then((response)=>response.json())
+.then((users)=>{renderUsers(users)
+})
+
+
+function buildTemplateUsers({id,name}) {
+    return `
+    <option value="${id}">${name}</option>
+    `
+}
+
+function renderUsers(users) {
+    usersList=users
+
+    let html=''
+
+    users.forEach((users)=>{
+        const template=buildTemplateUsers(users)
+        html+=template
+    })
+    selectUserElement.insertAdjacentHTML('beforeend',html)
+    selectUserEditElement.insertAdjacentHTML('beforeend',html)
 }
 
 function updateCounter() {
@@ -57,8 +88,10 @@ function handleSubmitForm() {
     const column=columnElement.value
     const title=titleTodoElement.value
     const discription = discriptionTodoElement.value 
+    const userId=selectUserElement.value
+    // const userName=selectUserElement.options[selectUserElement.selectedIndex].text
 
-    const newTodo=new Todo(id,column,title,discription)
+    const newTodo=new Todo(id,column,title,discription,userId)
     data.push(newTodo)
 
     setDataToLocalStorage(data)
@@ -98,12 +131,13 @@ const parentElement=target.closest('.card')
 const id=parentElement.dataset.id
 const todo=data.find((todo)=>todo.id==id)
 
+
 currentEditId=id
 
 document.querySelector('#edit-title').value=todo.title
 document.querySelector('#edit-discription').value=todo.discription
 document.querySelector('#edit-column').value=todo.column
-
+document.querySelector('.select__user-edit').value=todo.user
 const modal = new bootstrap.Modal(document.getElementById('editModal'))
 modal.show()
 }
@@ -113,27 +147,37 @@ function handleSaveEditedCard() {
     const title=document.querySelector('#edit-title').value
     const discription=document.querySelector('#edit-discription').value
     const column=document.querySelector('#edit-column').value
+    const userId=document.querySelector('.select__user-edit').value
 
     const index=data.findIndex((todo)=>todo.id==currentEditId)
+
+     if (index === -1) {
+        alert('Ошибка: задача не найдена!')
+        return
+    }
 
     data[index].title=title
     data[index].discription=discription
     data[index].column=column
+    data[index].user=userId
 
     setDataToLocalStorage(data)
     render(data)
     currentEditId=null
 }
 
-
-function buildTemplate({id,title,discription,createdAt}) {
+function buildTemplate({id,title,discription,createdAt,user}) {
     const date=new Date(createdAt)
+    const userObj=usersList.find(u=>u.id==user)
+    const userName=userObj?userObj.name:'unknown user'
+
     return `
         <div data-id="${id}" class="card" style="width: 18rem;">
         <button data-role="remove" class="btn btn-close"></button>
             <div class="card-body">
                 <h5 class="card-title">${title}</h5>
                 <p class="card-text">${discription}</p>
+                <p class="card-text">${userName}</p>
                 <div class="card__time d-flex">
                     <div class="card__time-day d-flex p-2">
                         <div class="card-createdAt">${date.getFullYear()}</div>
