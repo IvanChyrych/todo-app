@@ -89,9 +89,17 @@ function handleSubmitForm() {
     const title=titleTodoElement.value
     const discription = discriptionTodoElement.value 
     const userId=selectUserElement.value
-    // const userName=selectUserElement.options[selectUserElement.selectedIndex].text
 
     const newTodo=new Todo(id,column,title,discription,userId)
+
+if (column==='in-progress') {
+    const inProgressTask=data.filter((todo)=>todo.column==='in-progress')
+    if (inProgressTask.length>=6) {
+        alert('too much tasks!')
+        return
+    }
+}
+
     data.push(newTodo)
 
     setDataToLocalStorage(data)
