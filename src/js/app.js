@@ -1,3 +1,5 @@
+import { getDataFromLocalStorage, setDataToLocalStorage } from './localStorage.js'
+
 const saveTodoButtonElement=document.querySelector('#save-todo-button')
 const titleTodoElement=document.querySelector('#title')
 const discriptionTodoElement=document.querySelector('#discription')
@@ -19,7 +21,6 @@ const data=getDataFromLocalStorage()
 render(data)
 
 let currentEditId=null
-
 
 saveTodoButtonElement.addEventListener('click', handleSubmitForm)
 trelloCardsElement.addEventListener('click',handleRemoveCard)
@@ -43,7 +44,6 @@ fetch('https://jsonplaceholder.typicode.com/users')
 .then((users)=>{renderUsers(users)
 })
 
-
 function buildTemplateUsers({id,name}) {
     return `
     <option value="${id}">${name}</option>
@@ -52,7 +52,6 @@ function buildTemplateUsers({id,name}) {
 
 function renderUsers(users) {
     usersList=users
-
     let html=''
 
     users.forEach((users)=>{
@@ -101,7 +100,6 @@ if (column==='in-progress') {
 }
 
     data.push(newTodo)
-
     setDataToLocalStorage(data)
     render(data)
 }
@@ -156,10 +154,9 @@ function handleSaveEditedCard() {
     const discription=document.querySelector('#edit-discription').value
     const column=document.querySelector('#edit-column').value
     const userId=document.querySelector('.select__user-edit').value
-
     const index=data.findIndex((todo)=>todo.id==currentEditId)
 
-     if (index === -1) {
+    if (index === -1) {
         alert('Ошибка: задача не найдена!')
         return
     }
@@ -180,7 +177,7 @@ function buildTemplate({id,title,discription,createdAt,user}) {
     const userName=userObj?userObj.name:'unknown user'
 
     return `
-        <div data-id="${id}" class="card" style="width: 18rem;">
+        <div  data-id="${id}" class="card m-2 w-90" style="max-width:400px;">
         <button data-role="remove" class="btn btn-close"></button>
             <div class="card-body">
                 <h5 class="card-title">${title}</h5>
@@ -204,22 +201,6 @@ function buildTemplate({id,title,discription,createdAt,user}) {
         <button data-role="edit" class="btn btn-warning">edit</button>
         </div>
     `
-}
-
-function setDataToLocalStorage(data) {
-    localStorage.setItem('todoItem', JSON.stringify(data))
-}
-
-export function getDataFromLocalStorage() {
-    const data=localStorage.getItem('todoItem')
-    if (data) {
-        const dataFromStorage=JSON.parse(data)
-        return dataFromStorage.map((todo)=>{
-            return todo
-        })
-    }else{
-        return[]
-    }
 }
 
 function currentTime() {

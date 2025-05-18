@@ -30,7 +30,25 @@
 }
 
 .trello__todo-container{
+    max-height: 80vh;
     display: flex;
     flex-direction: column;
+    overflow: auto;
+    align-items: center;
+}
+
+.trello__inprogress-container{
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    align-items: center;
+}
+
+.trello__done-container{
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
     align-items: center;
 }
