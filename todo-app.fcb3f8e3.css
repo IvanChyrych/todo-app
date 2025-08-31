@@ -1,0 +1,39 @@
+.container {
+  justify-content: center;
+  height: 100vh;
+  display: flex;
+}
+
+.trello {
+  width: 100%;
+  height: 100%;
+}
+
+.trello__header {
+  justify-content: space-between;
+  display: flex;
+}
+
+.trello__cards {
+  flex: 1;
+  justify-content: space-between;
+  display: flex;
+}
+
+.trello__column {
+  background-color: #c2ffb1;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 33%;
+  height: 90vh;
+  display: flex;
+}
+
+.trello__todo-container, .trello__inprogress-container, .trello__done-container {
+  flex-direction: column;
+  align-items: center;
+  max-height: 80vh;
+  display: flex;
+  overflow: auto;
+}
+/*# sourceMappingURL=todo-app.fcb3f8e3.css.map */
